@@ -5,9 +5,19 @@
 
 - [Install](#install)
 - [Usage](#usage)
+    - [Import](#import)
     - [Add plugin](#add-plugin)
-    - [Trigger events](#trigger-event)
-    - [Assign click event on element](#adapt-click-event)
+    - [Dispatch events](#dispatch-event)
+        - [Adapt Click events](#adapt-click-events)
+            - [`.adaptClick();`](#adapt-click)
+            - [`.adaptClickAndNavigate();`](#adapt-click)
+    - [Extending functionality](#plugins)
+        - [Adding plugins](#add-plugin)
+        - [Available plugins](#available-plugins)
+        - [Creating plugins](#create-plugins)
+            - [Adding new functions](#plugin-new-function)
+            - [Extending exsisting functions](#plugin-extend-function)
+        - [Prevent adding of default plugins](#prevent-default)
 
 <a name="install"></a>
 ## Install
@@ -59,9 +69,10 @@ AdaptEvent.dispatch( 'Event name', 'Description', {
 } );
 ```
 
-<a name="click-event"></a>
-#### Adapt click events
+<a name="adapt-click-events"></a>
+#### Adapt Click events
 
+<a name="adapt-click"></a>
 ##### Function `.adaptClick();`
 ```js
 /*
@@ -79,6 +90,7 @@ document.querySelector( '.logo' ).adaptClick( function( event ) {
 }, 'a-click', 'logo' );
 ```
 
+<a name="adapt-click-and-navigate"></a>
 ##### Function `.adaptClickAndNavigate();`
 ```js
 /*
@@ -111,6 +123,7 @@ You can also easily add plugins to trigger other events like Google DoubleClick,
 AdaptEvent.addPlugin( new AdFormEvents );
 ```
 
+<a name="available-plugins"></a>
 #### Available plugins
 
 Here is a set of preconfigured plugins to use
@@ -124,6 +137,7 @@ Here is a set of preconfigured plugins to use
     - [Swipe](#)
     - [Face recognition](#)
 
+<a name="create-plugins"></a>
 #### Creating plugins
 
 > The `adaptClick` function is a plugin and can be used as a reference.
@@ -153,11 +167,13 @@ class AdForm {
 AdaptEvent.addPlugin( new AdForm );
 ```
 
+<a name="plugin-new-function"></a>
 ##### Adding new functions
 When adding new functionality to an element, and you want to trigger an event it is important you call the `AdaptEvent.trigger` function and uses the event hooks to handle your logic.
 
 This is because we want to trigger the event on all places like the Google DoubleClick events when your event is fired. The `AdaptEvent.trigger` function contains logic to trigger events on all plugins.
 
+<a name="plugin-extend-function"></a>
 ##### Extending existing functions
 > All plugins will be extended in the order they are added.
 > This means that the last plugin has presidence over the rest.
@@ -205,6 +221,7 @@ document.querySelector( '.logo' )
     .adaptClickAndNavigate( 'https://adaptretail.com' );
 ```
 
+<a name="prevent-default"></a>
 ##### Prevent adding of default plugins
 
  You can prevent the adding of the default plugins.

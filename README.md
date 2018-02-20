@@ -8,16 +8,16 @@
     - [Import](#import)
     - [Add plugin](#add-plugin)
     - [Dispatch events](#dispatch-event)
-        - [Adapt Click events](#adapt-click-events)
-            - [`.adaptClick();`](#adapt-click)
-            - [`.adaptClickAndNavigate();`](#adapt-click)
+        <!--- [Adapt Click events](#adapt-click-events)-->
+            <!--- [`.adaptClick();`](#adapt-click)-->
+            <!--- [`.adaptClickAndNavigate();`](#adapt-click)-->
     - [Extending functionality](#plugins)
-        - [Adding plugins](#add-plugin)
-        - [Available plugins](#available-plugins)
-        - [Creating plugins](#create-plugins)
-            - [Adding new functions](#plugin-new-function)
-            - [Extending exsisting functions](#plugin-extend-function)
-        - [Prevent adding of default plugins](#prevent-default)
+        <!--- [Adding plugins](#add-plugin)-->
+        <!--- [Available plugins](#available-plugins)-->
+        <!--- [Creating plugins](#create-plugins)-->
+            <!--- [Adding new functions](#plugin-new-function)-->
+            <!--- [Extending exsisting functions](#plugin-extend-function)-->
+        <!--- [Prevent adding of default plugins](#prevent-default)-->
 
 <a name="install"></a>
 ## Install

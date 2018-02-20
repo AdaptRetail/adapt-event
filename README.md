@@ -37,7 +37,8 @@ import AdaptData from '@adapt-retail/adapt-event';
 // Require function
 const AdaptData = require( '@adapt-retail/adapt-event' );
 
-// Prepare the AdaptEvent class
+
+// When imported, prepare the AdaptEvent class
 AdaptData.bindToElements(); // ( This should only be called once )
 ```
 

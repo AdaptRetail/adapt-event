@@ -39,7 +39,7 @@ const AdaptData = require( '@adapt-retail/adapt-event' );
 
 
 // When imported, prepare the AdaptEvent class
-AdaptData.bindToElements(); // ( This should only be called once )
+AdaptData.prepare(); // ( This should only be called once )
 ```
 
 <a name="dispatch-event"></a>
@@ -105,7 +105,7 @@ You can also easily add plugins to trigger other events like Google DoubleClick,
 
 <a name="add-plugin"></a>
 #### Adding plugins
-> All plugins should be added before the `AdaptData.bindToElements()`.
+> All plugins should be added before the `AdaptData.prepare()`.
 
 ```js
 AdaptEvent.addPlugin( new AdFormEvents );
@@ -214,5 +214,5 @@ document.querySelector( '.logo' )
 AdaptEvent.preventDefaultPlugins();
 
 // Start the plugin
-AdaptData.bindToElements();
+AdaptData.prepare();
 ```

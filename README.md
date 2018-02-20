@@ -42,14 +42,14 @@ When installed, simply import the package with normal node syntax.
 
 ```js
 // EcmaScript6 and up
-import AdaptData from '@adapt-retail/adapt-event';
+import AdaptEvent from '@adapt-retail/adapt-event';
 
 // Require function
-const AdaptData = require( '@adapt-retail/adapt-event' );
+const AdaptEvent = require( '@adapt-retail/adapt-event' );
 
 
 // When imported, prepare the AdaptEvent class
-AdaptData.prepare(); // ( This should only be called once )
+AdaptEvent.prepare(); // ( This should only be called once )
 ```
 
 <a name="dispatch-event"></a>
@@ -117,7 +117,7 @@ You can also easily add plugins to trigger other events like Google DoubleClick,
 
 <a name="add-plugin"></a>
 #### Adding plugins
-> All plugins should be added before the `AdaptData.prepare()`.
+> All plugins should be added before the `AdaptEvent.prepare()`.
 
 ```js
 AdaptEvent.addPlugin( new AdForm );
@@ -231,5 +231,5 @@ document.querySelector( '.logo' )
 AdaptEvent.preventDefaultPlugins();
 
 // Start the plugin
-AdaptData.prepare();
+AdaptEvent.prepare();
 ```

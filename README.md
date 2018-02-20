@@ -120,7 +120,7 @@ You can also easily add plugins to trigger other events like Google DoubleClick,
 > All plugins should be added before the `AdaptData.prepare()`.
 
 ```js
-AdaptEvent.addPlugin( new AdFormEvents );
+AdaptEvent.addPlugin( new AdForm );
 ```
 
 <a name="available-plugins"></a>

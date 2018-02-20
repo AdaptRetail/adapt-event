@@ -213,6 +213,6 @@ document.querySelector( '.logo' )
 // Prevent default
 AdaptEvent.preventDefaultPlugins();
 
-// Star the plugin
+// Start the plugin
 AdaptData.bindToElements();
 ```

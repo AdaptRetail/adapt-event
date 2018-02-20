@@ -59,39 +59,39 @@ AdaptEvent.dispatch( 'Event name', 'Description', {
 ```
 
 <a name="click-event"></a>
-#### Adapt click event
-Automatically triggers adapt events including the position of the mouse when the event is triggered.
+#### Adapt click events
 
+##### Function `.adaptClick();`
 ```js
-// Now you can call call `.adaptClick` on all `DOMElements`.
+/*
+ * Automatically triggers adapt events,
+ * including the position of the mouse when the event is triggered.
+ *
+ * @param event
+ * @param description (optional) (default: 'click')
+ * @param position (optional) (default: String representation of the element)
+ * 
+ * @return void
+ */
 document.querySelector( '.logo' ).adaptClick( function( event ) {
     ...
-} );
-
-// If no event information is provided, the event name will be 'click',
-// and the descrpition will be the element
+}, 'a-click', 'logo' );
 ```
 
+##### Function `.adaptClickAndNavigate();`
 ```js
-// You can also set custom event name and description
-document.querySelector( '.logo' ).adaptClick( function( event ) {
-    ...
-}, 'click-on', 'logo' );
-```
-
-```js
-// This function is extending the adaptClick and adds functionality to navigate to url
-document.querySelector( '.logo' ).adaptClickAndNavigate( 'https://adaptretail.com' );
-
-// Default event:
-// Name: 'to-url'
-// Description: The url provided to navigate to
-```
-
-```js
-// You can also set custom event name and description
-document.querySelector( '.logo' ).adaptClickAndNavigate( 'https://adaptretail.com',
-'toUrl', 'homepage');
+/*
+ * This function is extending the adaptClick
+ * and adds functionality to navigate to url
+ *
+ * @param url
+ * @param description (optional) (default: 'navigate-to-url')
+ * @param position (optional) (default: The url provided to navigate to)
+ * 
+ * @return void
+ */
+document.querySelector( '.logo' )
+    .adaptClickAndNavigate( 'https://adaptretail.com', 'toUrl', 'homepage');
 ```
 
 <a name="plugins"></a>
@@ -109,6 +109,19 @@ You can also easily add plugins to trigger other events like Google DoubleClick,
 ```js
 AdaptEvent.addPlugin( new AdFormEvents );
 ```
+
+#### Available plugins
+
+Here is a set of preconfigured plugins to use
+
+- Display networks events
+    - [AdForm](#not-created-yet)
+    - [DoubleClick](#not-created-yet)
+    - [Adform](#not-created-yet)
+    - [Adform](#not-created-yet)
+- Custom functions
+    - [Swipe](#)
+    - [Face recognition](#)
 
 #### Creating plugins
 
@@ -163,13 +176,17 @@ class AdFormClickTag {
 
         // Create a new one
         Element.prototype.adaptClickAndNavigate = function( url, event, descrpition ) {
+
+            // Manipulate the url to make it a clicktag url
             var clickTag = this.clickTag( dhtml.getVar( 'clickTAG' ), url )
-
             var landingPageTarget = dhtml.getVar('landingPageTarget', '_blank');
-                window.open(newClickTAG,landingPageTarget);
-            }
 
-            existingFunction( clickTag, landingPageTarget )
+            // Set the description to the normal url if not set
+            description = description || url;
+
+            // Call the previous function
+            existingFunction( clickTag, event, descrpition );
+        }
 
     }
 
@@ -179,8 +196,10 @@ class AdFormClickTag {
 
 }
 
+// Add the functionality
 AdaptEvent.addPlugin( new AdFormClickTag );
 
+// Use it
 document.querySelector( '.logo' )
     .adaptClickAndNavigate( 'https://adaptretail.com' );
 ```

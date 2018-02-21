@@ -5,7 +5,16 @@ const PLUGINS = [];
 module.exports = class AdaptEvent {
 
     static addPlugin( plugin ) {
+
+        if (!plugin) {
+            throw new TypeError( 'No plugin provided.' );
+        }
+
         PLUGINS.push( plugin );
+
+        if (typeof plugin.mounted !== 'undefined') {
+            plugin.mounted.call( this );
+        }
     }
 
     static dispatch( event, description, mousePosition = null ) {
@@ -22,7 +31,9 @@ module.exports = class AdaptEvent {
         overtakenAdaptEvent( event, description, adaptMousePosition );
 
         for (var i = 0, len = PLUGINS.length; i < len; i++) {
-            PLUGINS[i].onDispatch.call( this, event, description, mousePosition );
+            if (typeof PLUGINS[i].onDispatch !== 'undefined') {
+                PLUGINS[i].onDispatch.call( this, event, description, mousePosition );
+            }
         }
 
     }

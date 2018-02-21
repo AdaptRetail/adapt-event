@@ -32,6 +32,27 @@ test( 'when dispatching event we are calling the "event" function provided by ad
 
 } );
 
+test( 'it can add empty plugin without throwing error', t => {
+
+    t.notThrows(()=> {
+        class TestPlugin {}
+
+        AdaptEvent.addPlugin( new TestPlugin );
+
+        AdaptEvent.dispatch( 'test' );
+    });
+
+} );
+
+test( 'it throws error if no plugin is provided', t => {
+
+    const error = t.throws(()=> {
+        AdaptEvent.addPlugin();
+    });
+
+    t.is( error.message, 'No plugin provided.' )
+} );
+
 test( 'it can add plugin to extend what happends when we trigger an event', t => {
 
     class TestPlugin {
@@ -74,4 +95,21 @@ test( 'it can add plugin to extend what happends when we trigger an event', t =>
             y: 200,
         }
     } );
+} );
+
+test( 'plugins can add own functionality', t => {
+
+    window.testPluginMountCalled = false;
+
+    class TestPlugin {
+
+        mounted() {
+            window.testPluginMountCalled = true;
+        }
+
+    }
+
+    AdaptEvent.addPlugin( new TestPlugin );
+
+    t.true( window.testPluginMountCalled );
 } );

@@ -16,8 +16,6 @@ test.beforeEach( t => {
 
 test( 'when dispatching event we are calling the "event" function provided by adapt', t => {
 
-    AdaptEvent.prepare();
-
     AdaptEvent.dispatch( 'my-event', 'description', {
         x: 100,
         y: 200,
@@ -50,9 +48,6 @@ test( 'it can add plugin to extend what happends when we trigger an event', t =>
 
     // Add the plugin
     AdaptEvent.addPlugin( new TestPlugin );
-
-    // Prepare the class
-    AdaptEvent.prepare();
 
     // Dispatch event
     AdaptEvent.dispatch( 'my-event', 'description', {

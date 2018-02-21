@@ -4,17 +4,13 @@ const PLUGINS = [];
 
 module.exports = class AdaptEvent {
 
-    static prepare() {
-
-        overtakenAdaptEvent = window.event;
-
-    }
-
     static addPlugin( plugin ) {
         PLUGINS.push( plugin );
     }
 
     static dispatch( event, description, mousePosition = null ) {
+
+        overtakenAdaptEvent = overtakenAdaptEvent || window.event;
 
         if (mousePosition) {
             var adaptMousePosition = {

@@ -29,7 +29,7 @@ npm install @adapt-retail/adapt-event
 <a name="usage"></a>
 ## Usage
 
-The event class will help you trigger events in Adapt Retail.
+The event class will help you dispatch events in Adapt Retail.
 You can use it to track whatever event you like, but we got some preconfigured events for you.
 
 When working with the production locally we only fake the events to the server and you can see the output of your event in the console.
@@ -46,10 +46,6 @@ import AdaptEvent from '@adapt-retail/adapt-event';
 
 // Require function
 const AdaptEvent = require( '@adapt-retail/adapt-event' );
-
-
-// When imported, prepare the AdaptEvent class
-AdaptEvent.prepare(); // ( This should only be called once )
 ```
 
 <a name="dispatch-event"></a>
@@ -76,8 +72,8 @@ AdaptEvent.dispatch( 'Event name', 'Description', {
 ##### Function `.adaptClick();`
 ```js
 /*
- * Automatically triggers adapt events,
- * including the position of the mouse when the event is triggered.
+ * Automatically dispatchs adapt events,
+ * including the position of the mouse when the event is dispatched.
  *
  * @param event
  * @param description (optional) (default: 'click')
@@ -110,14 +106,15 @@ document.querySelector( '.logo' )
 <a name="plugins"></a>
 ### Extending functionality
 
-Out of the box this package automatically triggers events for Adapt Retail.
+Out of the box this package automatically dispatchs events for Adapt Retail.
 Both for Adapt Rapports and Google Analytics.
 
-You can also easily add plugins to trigger other events like Google DoubleClick, AdForm, Delta Projects and other with the same API.
+You can also easily add plugins to dispatch other events like Google DoubleClick, AdForm, Delta Projects and other with the same API.
 
 <a name="add-plugin"></a>
 #### Adding plugins
-> All plugins should be added before the `AdaptEvent.prepare()`.
+
+You can extend functionality of the AdaptEvent by adding plugins.
 
 ```js
 AdaptEvent.addPlugin( new AdForm );
@@ -144,7 +141,27 @@ Here is a set of preconfigured plugins to use
 
 ```js
 class AdForm {
-    onEventTrigger( event, description, position ) {
+
+    /**
+     * This method is called when
+     * the plugin is added to the plugin stack
+     * @return void
+     */
+    mounted() {
+        console.log( 'Plugin is ready!' );
+    }
+
+    /**
+     * Gets called when AdaptEvent.dispatch
+     * is called.
+     * 
+     * @param event
+     * @param description = null
+     * @param mousePosition Object = null
+     *
+     * @return void
+     */
+    onDispatch( event, description, position ) {
 
         // Cancel if resources is not available
         if (typeof dhtml === 'undefined') {
@@ -169,9 +186,9 @@ AdaptEvent.addPlugin( new AdForm );
 
 <a name="plugin-new-function"></a>
 ##### Adding new functions
-When adding new functionality to an element, and you want to trigger an event it is important you call the `AdaptEvent.trigger` function and uses the event hooks to handle your logic.
+When adding new functionality to an element, and you want to dispatch an event it is important you call the `AdaptEvent.dispatch` function and use the `onDispatch` function to handle your logic.
 
-This is because we want to trigger the event on all places like the Google DoubleClick events when your event is fired. The `AdaptEvent.trigger` function contains logic to trigger events on all plugins.
+This is because we want to dispatch the event on all plugins like AdaptRetail, Google DoubleClick etc. when your event is fired.
 
 <a name="plugin-extend-function"></a>
 ##### Extending existing functions
@@ -229,7 +246,4 @@ document.querySelector( '.logo' )
 ```js
 // Prevent default
 AdaptEvent.preventDefaultPlugins();
-
-// Start the plugin
-AdaptEvent.prepare();
 ```

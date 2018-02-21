@@ -12,11 +12,11 @@ test.beforeEach( t => {
             mousePosition
         };
     };
-
-    AdaptEvent.prepare();
 } );
 
 test( 'when dispatching event we are calling the "event" function provided by adapt', t => {
+
+    AdaptEvent.prepare();
 
     AdaptEvent.dispatch( 'my-event', 'description', {
         x: 100,
@@ -32,4 +32,51 @@ test( 'when dispatching event we are calling the "event" function provided by ad
         }
     } );
 
+} );
+
+test( 'it can add plugin to extend what happends when we trigger an event', t => {
+
+    class TestPlugin {
+
+        onDispatch( event, description, position ) {
+            window.testPluginEvent = {
+                event,
+                description,
+                position,
+            };
+        }
+
+    }
+
+    // Add the plugin
+    AdaptEvent.addPlugin( new TestPlugin );
+
+    // Prepare the class
+    AdaptEvent.prepare();
+
+    // Dispatch event
+    AdaptEvent.dispatch( 'my-event', 'description', {
+        x: 100,
+        y: 200,
+    } );
+
+    // Check if we are calling the normal event
+    t.deepEqual( window.triggeredEvent, {
+        event: 'my-event',
+        description: 'description',
+        mousePosition: {
+            pageX: 100,
+            pageY: 200,
+        }
+    } );
+
+    // Check if we are calling the normal event
+    t.deepEqual( window.testPluginEvent, {
+        event: 'my-event',
+        description: 'description',
+        position: {
+            x: 100,
+            y: 200,
+        }
+    } );
 } );

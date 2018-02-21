@@ -1,0 +1,41 @@
+{
+  "name": "@adapt-retail/adapt-event",
+  "version": "0.1.0",
+  "description": "Dispatch events eventa to adapt and other.",
+  "main": "dist/AdaptEvent.js",
+  "scripts": {
+    "test": "ava",
+    "tdd": "executor 'npm run test' --watch='**/*.js' --ignore='node_modules/'",
+    "build": "babel src -d dist",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LasseHaslev/adapt-event.git"
+  },
+  "keywords": [
+    "adapt-retail",
+    "adapt",
+    "banners",
+    "instore-tv",
+    "template"
+  ],
+  "author": "Lasse S. Haslev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LasseHaslev/adapt-event/issues"
+  },
+  "homepage": "https://github.com/LasseHaslev/adapt-event#readme",
+  "devDependencies": {
+    "@lassehaslev/executor": "^1.0.1",
+    "ava": "^0.25.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "browser-env": "^3.2.5"
+  },
+  "ava": {
+    "require": [
+      "./test/helpers/setup-browser-env.js"
+    ]
+  }
+}

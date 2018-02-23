@@ -107,3 +107,6 @@ test( 'plugins can add own functionality', t => {
 
     t.true( window.testPluginMountCalled );
 } );
+
+// test( 'A plugin can only be added one time.', t => {
+// } );

@@ -1,5 +1,5 @@
 # @adapt-retail/adapt-data
-> ⚠️ Warning: This package does not yet exists yet and we are trying to figure out the API.
+> ⚠️ This package is not released in stable version, and changes may occur.
 
 > Easy dispatching of events in [Adapt Retail](https://adaptretail.com).
 
@@ -32,8 +32,8 @@ npm install @adapt-retail/adapt-event
 The event class will help you dispatch events in Adapt Retail.
 You can use it to track whatever event you like, but we got some preconfigured events for you.
 
-When working with the production locally we only fake the events to the server and you can see the output of your event in the console.
-When pushed to Adapt, we automatically switch out the events to use the production event class.
+<!-- When working with the production locally we only fake the events to the server and you can see the output of your event in the console. -->
+<!-- When pushed to Adapt, we automatically switch out the events to use the production event class. -->
 
 <a name="import"></a>
 ### Import to project
@@ -43,9 +43,6 @@ When installed, simply import the package with normal node syntax.
 ```js
 // EcmaScript6 and up
 import AdaptEvent from '@adapt-retail/adapt-event';
-
-// Require function
-const AdaptEvent = require( '@adapt-retail/adapt-event' );
 ```
 
 <a name="dispatch-event"></a>
@@ -59,9 +56,16 @@ const AdaptEvent = require( '@adapt-retail/adapt-event' );
  * 
  * @return void
  */
-AdaptEvent.dispatch( 'Event name', 'Description', {
-    x: 100,
-    y: 100,
+AdaptEvent.dispatch( 'Event name', 'Description' );
+```
+
+If you dispatching an MouseEvent, add the event as the third parameter
+to track where the click occur.
+```js
+var logo = document.querySelector( '.logo' );
+
+logo.addEventListener( 'click', function( event ) {
+    AdaptEvent.dispatch( 'click', 'on-logo', event );
 } );
 ```
 
@@ -75,9 +79,10 @@ AdaptEvent.dispatch( 'Event name', 'Description', {
  * Automatically dispatchs adapt events,
  * including the position of the mouse when the event is dispatched.
  *
- * @param event
- * @param description (optional) (default: 'click')
- * @param position (optional) (default: String representation of the element)
+ * @param closure
+ * @param event (optional) (default: 'click')
+ * @param description (optional) (default: String representation of the element)
+ * Example (<div class=".logo"></div>)
  * 
  * @return void
  */
@@ -86,22 +91,22 @@ document.querySelector( '.logo' ).adaptClick( function( event ) {
 }, 'a-click', 'logo' );
 ```
 
-<a name="adapt-click-and-navigate"></a>
-##### Function `.adaptClickAndNavigate();`
-```js
-/*
- * This function is extending the adaptClick
- * and adds functionality to navigate to url
- *
- * @param url
- * @param description (optional) (default: 'navigate-to-url')
- * @param position (optional) (default: The url provided to navigate to)
- * 
- * @return void
- */
-document.querySelector( '.logo' )
-    .adaptClickAndNavigate( 'https://adaptretail.com', 'toUrl', 'homepage');
-```
+<!-- <a name="adapt-click-and-navigate"></a> -->
+<!-- ##### Function `.adaptClickAndNavigate();` -->
+<!-- ```js -->
+<!-- /* -->
+ <!-- * This function is extending the adaptClick -->
+ <!-- * and adds functionality to navigate to url -->
+ <!-- * -->
+ <!-- * @param url -->
+ <!-- * @param description (optional) (default: 'navigate-to-url') -->
+ <!-- * @param position (optional) (default: The url provided to navigate to) -->
+ <!-- *  -->
+ <!-- * @return void -->
+ <!-- */ -->
+<!-- document.querySelector( '.logo' ) -->
+    <!-- .adaptClickAndNavigate( 'https://adaptretail.com', 'toUrl', 'homepage'); -->
+<!-- ``` -->
 
 <a name="plugins"></a>
 ### Extending functionality
@@ -120,19 +125,19 @@ You can extend functionality of the AdaptEvent by adding plugins.
 AdaptEvent.addPlugin( new AdForm );
 ```
 
-<a name="available-plugins"></a>
-#### Available plugins
+<!-- <a name="available-plugins"></a> -->
+<!-- #### Available plugins -->
 
-Here is a set of preconfigured plugins to use
+<!-- Here is a set of preconfigured plugins to use -->
 
-- Display networks events
-    - [AdForm](#not-created-yet)
-    - [DoubleClick](#not-created-yet)
-    - [Adform](#not-created-yet)
-    - [Adform](#not-created-yet)
-- Custom functions
-    - [Swipe](#)
-    - [Face recognition](#)
+<!-- - Display networks events -->
+    <!-- - [AdForm](#not-created-yet) -->
+    <!-- - [DoubleClick](#not-created-yet) -->
+    <!-- - [Adform](#not-created-yet) -->
+    <!-- - [Adform](#not-created-yet) -->
+<!-- - Custom functions -->
+    <!-- - [Swipe](#) -->
+    <!-- - [Face recognition](#) -->
 
 <a name="create-plugins"></a>
 #### Creating plugins
@@ -184,66 +189,14 @@ class AdForm {
 AdaptEvent.addPlugin( new AdForm );
 ```
 
-<a name="plugin-new-function"></a>
-##### Adding new functions
-When adding new functionality to an element, and you want to dispatch an event it is important you call the `AdaptEvent.dispatch` function and use the `onDispatch` function to handle your logic.
+## Development
+```bash
+# Install dependencies
+npm install
 
-This is because we want to dispatch the event on all plugins like AdaptRetail, Google DoubleClick etc. when your event is fired.
+# Run test suit
+npm run test
 
-<a name="plugin-extend-function"></a>
-##### Extending existing functions
-> All plugins will be extended in the order they are added.
-> This means that the last plugin has presidence over the rest.
-
-If you want to extend an existing function such as `adaptClickAndNavigate` you can do so.
-
-```js
-class AdFormClickTag {
-
-    extendFunction() {
-        if ( typeof dhtml === 'undefined' ) {
-            return;
-        }
-
-        // Store the old function
-        var existingFunction = Element.prototype.adaptClickAndNavigate;
-
-        // Create a new one
-        Element.prototype.adaptClickAndNavigate = function( url, event, descrpition ) {
-
-            // Manipulate the url to make it a clicktag url
-            var clickTag = this.clickTag( dhtml.getVar( 'clickTAG' ), url )
-            var landingPageTarget = dhtml.getVar('landingPageTarget', '_blank');
-
-            // Set the description to the normal url if not set
-            description = description || url;
-
-            // Call the previous function
-            existingFunction( clickTag, event, descrpition );
-        }
-
-    }
-
-    clickTag(clickTag,cpdir){
-		return clickTag.split("CREFURL")[0] + ";cpdir=" + cpdir +  ";CREFURL" + clickTag.split("CREFURL")[1];
-	}
-
-}
-
-// Add the functionality
-AdaptEvent.addPlugin( new AdFormClickTag );
-
-// Use it
-document.querySelector( '.logo' )
-    .adaptClickAndNavigate( 'https://adaptretail.com' );
-```
-
-<a name="prevent-default"></a>
-##### Prevent adding of default plugins
-
- You can prevent the adding of the default plugins.
-
-```js
-// Prevent default
-AdaptEvent.preventDefaultPlugins();
+# Run test suite on file change
+npm run tdd
 ```

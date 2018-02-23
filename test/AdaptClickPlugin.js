@@ -9,8 +9,12 @@ var dispatchMouseClickOn = function( element, x, y ) {
         'view': window,
         'bubbles': true,
         'cancelable': true,
+        'pageX': x,
+        'pageY': y,
+        'clientX': x,
+        'clientY': y,
         'screenX': x,
-        'screenY': y
+        'screenY': y,
     });
     element.dispatchEvent(event);
 }
@@ -33,42 +37,38 @@ test.beforeEach( function() {
     }
     var element = document.createElement( 'div' );
 
-    // element.id = 'my-element';
-    // element.classList.add( 'test' );
-    // element.classList.add( 'class' );
+    element.innerHTML = 'This is a test';
+
+    element.id = 'my-element';
+    element.classList.add( 'test' );
+    element.classList.add( 'class' );
     document.body.appendChild( element );
-    // console.log(document.body.firstChild.outerHTML);
 } );
 
 test( 'it can extend DOMElement to include click function', t => {
 
-    var closureTriggered = false;
-
+    var closureEvent = null;
     document.firstChild.adaptClick( function(event) {
-        closureTriggered = true;
+        closureEvent = event;
     } );
 
-    document.firstChild.click();
+    // Trigger the event
+    dispatchMouseClickOn( document.body.firstChild, 100, 200 );
 
-    t.truthy( window.triggeredEvent );
-});
+    // Check if the closure is called
+    // And if the event is a MouseEvent
+    t.true( closureEvent instanceof MouseEvent );
 
-// test( 'it can extend DOMElement to include click function', t => {
+    // Check if AdaptEvent.dispatch is called and set default properties
+    t.deepEqual( window.triggeredEvent, {
+        description: '<div id="my-element" class="test class"></div>',
+        event: 'click',
+        mousePosition: closureEvent
+    } );
 
-    // var testEvent = null;
-    // console.log(document.body.firstChild.outerHTML);
+} );
 
-    // document.firstChild.adaptClick( function(event) {
-        // console.log(this.outerHTML);
-        // testEvent = event;
-    // } );
-
-    // dispatchMouseClickOn( document.firstChild, 100, 200 );
-
-    // t.true( testEvent instanceof MouseEvent );
-
-    // t.deepEqual( window.triggeredEvent, {
-        // event: 'click',
-    // } );
-
+// test( 'it can overwrite the event and description', t => {
+// } );
+// test( 'it console.log the event if no event is defined on window', t => {
 // } );

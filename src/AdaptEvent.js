@@ -30,28 +30,22 @@ module.exports = class AdaptEvent {
      * 
      * @param event
      * @param description = null
-     * @param mousePosition Object = null
+     * @param event MouseEvent = null
      *
      * @return void
      */
-    static dispatch( event, description = null, mousePosition = null ) {
+    static dispatch( name, description = null, event = null ) {
 
         // Get the original event to call
         overtakenAdaptEvent = overtakenAdaptEvent || window.event;
 
         // Format the mouse position for Adapt
-        if (mousePosition) {
-            var adaptMousePosition = {
-                pageX: mousePosition.x,
-                pageY: mousePosition.y,
-            };
-        }
-        overtakenAdaptEvent( event, description, adaptMousePosition );
+        overtakenAdaptEvent( name, description, event );
 
         // Call "onDispatch" functions on all plugins
         for (var i = 0, len = PLUGINS.length; i < len; i++) {
             if (PLUGINS[i].onDispatch) {
-                PLUGINS[i].onDispatch.call( PLUGINS[i], event, description, mousePosition );
+                PLUGINS[i].onDispatch.call( PLUGINS[i], name, description, event );
             }
         }
 

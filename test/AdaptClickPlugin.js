@@ -42,6 +42,12 @@ test.beforeEach( function() {
     element.id = 'my-element';
     element.classList.add( 'test' );
     element.classList.add( 'class' );
+
+    // Add child element
+    var childElement = document.createElement( 'div' );
+    childElement.innerHtml = 'This is a child element'
+
+    element.appendChild( childElement );
     document.body.appendChild( element );
 } );
 
@@ -54,6 +60,7 @@ test( 'it can extend DOMElement to include click function', t => {
 
     // Trigger the event
     dispatchMouseClickOn( document.body.firstChild, 100, 200 );
+    //
 
     // Check if the closure is called
     // And if the event is a MouseEvent
@@ -68,7 +75,26 @@ test( 'it can extend DOMElement to include click function', t => {
 
 } );
 
-// test( 'it can overwrite the event and description', t => {
-// } );
+test( 'it can overwrite the event and description', t => {
+
+    var closureEvent = null;
+    var customEventName = 'custom-event-name';
+    var customEventDescription = 'Custom event description';
+
+    document.firstChild.adaptClick( function(event) {
+        closureEvent = event;
+    }, customEventName, customEventDescription );
+
+    // Trigger the event
+    dispatchMouseClickOn( document.body.firstChild, 100, 200 );
+
+    t.deepEqual( window.triggeredEvent, {
+        description: customEventDescription,
+        event: customEventName,
+        mousePosition: closureEvent
+    } );
+
+} );
+
 // test( 'it console.log the event if no event is defined on window', t => {
 // } );

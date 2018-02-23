@@ -20,7 +20,7 @@ module.exports = class AdaptEvent {
         PLUGINS.push( plugin );
 
         if (plugin.mounted) {
-            plugin.mounted.call( this );
+            plugin.mounted.call( plugin );
         }
     }
 
@@ -51,7 +51,7 @@ module.exports = class AdaptEvent {
         // Call "onDispatch" functions on all plugins
         for (var i = 0, len = PLUGINS.length; i < len; i++) {
             if (PLUGINS[i].onDispatch) {
-                PLUGINS[i].onDispatch.call( this, event, description, mousePosition );
+                PLUGINS[i].onDispatch.call( PLUGINS[i], event, description, mousePosition );
             }
         }
 

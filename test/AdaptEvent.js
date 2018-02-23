@@ -5,29 +5,23 @@ test.beforeEach( t => {
 
     window.triggeredEvent = null;
 
-    window.event = function( event, description, mousePosition ) {
+    window.event = function( event, description, mouseEvent ) {
         window.triggeredEvent = {
             event,
             description,
-            mousePosition
+            mouseEvent
         };
     };
 } );
 
-test( 'when dispatching event we are calling the "event" function provided by adapt', t => {
+test( 'Dispatching event without event function, will return null', t => {
 
-    AdaptEvent.dispatch( 'my-event', 'description', {
-        x: 100,
-        y: 200,
-    } );
+    AdaptEvent.dispatch( 'my-event', 'description' );
 
     t.deepEqual( window.triggeredEvent, {
         event: 'my-event',
         description: 'description',
-        mousePosition: {
-            pageX: 100,
-            pageY: 200,
-        }
+        mouseEvent: null,
     } );
 
 } );
@@ -80,9 +74,9 @@ test( 'it can add plugin to extend what happends when we trigger an event', t =>
     t.deepEqual( window.triggeredEvent, {
         event: 'my-event',
         description: 'description',
-        mousePosition: {
-            pageX: 100,
-            pageY: 200,
+        mouseEvent: {
+            x: 100,
+            y: 200,
         }
     } );
 

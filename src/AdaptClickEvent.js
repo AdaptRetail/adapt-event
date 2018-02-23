@@ -16,6 +16,15 @@ module.exports = class AdaptClickPlugin {
 
     onClick( closure, code, desc, event ) {
 
+        // if (!desc) {
+            // if (this.id) {
+                // desc += this.id;
+            // }
+            // if (this.className) {
+                // desc += this.className;
+            // }
+        // }
+
         closure.call( this, event );
 
         AdaptEvent.dispatch(code,desc, {

@@ -147,8 +147,10 @@ AdaptEvent.addPlugin( new AdForm );
 
 <a name="create-plugins"></a>
 #### Creating plugins
+> [AdaptClickEvent](https://github.com/LasseHaslev/adapt-event/blob/master/src/AdaptClickEvent.js) is actually a plugin.
+> Use it as a reference.
 
-> The `adaptClick` function is a plugin and can be used as a reference.
+Here is an example of extending the AdaptEvent to trigger AdForm events when we trigger events.
 
 ```js
 class AdForm {
@@ -192,6 +194,7 @@ class AdForm {
     }
 }
 
+// Add the plugin to AdaptEvent
 AdaptEvent.addPlugin( new AdForm );
 ```
 

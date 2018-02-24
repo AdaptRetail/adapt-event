@@ -50,5 +50,17 @@ module.exports = class AdaptClickPlugin {
         AdaptEvent.dispatch(eventName,description,event);
     }
 
-    onDispatchEvent() {}
+    /**
+     * Hook into AdaptEvent.dispatch
+     * by adding this function to your class
+     *
+     * This will be called after the original event is fired
+     *
+     * @param name
+     * @param description
+     * @param event MouseEvent
+     *
+     * @return void
+     */
+    onDispatchEvent(name, description, event) {}
 }

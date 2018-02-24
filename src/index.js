@@ -1,3 +1,8 @@
-const AdaptEvent = require( './AdaptEvent' );
+import AdaptEvent from './AdaptEvent';
+import AdaptClickEvent from './AdaptClickEvent';
 
-module.exports = AdaptEvent;
+export default AdaptEvent;
+export {
+    AdaptEvent,
+    AdaptClickEvent,
+}

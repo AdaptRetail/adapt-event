@@ -4,8 +4,8 @@
   "description": "Dispatch events eventa to adapt and other.",
   "main": "dist/index.js",
   "scripts": {
-    "test": "ava",
-    "tdd": "executor 'npm run test' --watch='**/*.js' --ignore='node_modules/'",
+    "test": "npm run build && ava",
+    "tdd": "executor 'npm run test' --watch='**/*.js' --ignore='node_modules/' --ignore='dist/'",
     "build": "babel src -d dist",
     "prepublish": "npm run build"
   },

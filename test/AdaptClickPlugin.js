@@ -1,6 +1,5 @@
 import test from 'ava';
-import AdaptEvent from '../src/index';
-import AdaptClickEvent from '../src/AdaptClickEvent';
+import { AdaptEvent, AdaptClickEvent } from '../dist/index';
 
 AdaptEvent.addPlugin( new AdaptClickEvent );
 

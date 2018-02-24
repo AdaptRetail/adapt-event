@@ -1,5 +1,5 @@
 import test from 'ava';
-import AdaptEvent from '../src/index';
+import AdaptEvent from '../dist/index';
 
 test.beforeEach( t => {
 

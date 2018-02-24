@@ -50,5 +50,5 @@ module.exports = class AdaptClickPlugin {
         AdaptEvent.dispatch(eventName,description,event);
     }
 
-    onDispatch() {}
+    onDispatchEvent() {}
 }

@@ -51,7 +51,7 @@ test( 'it can add plugin to extend what happends when we trigger an event', t =>
 
     class TestPlugin {
 
-        onDispatch( event, description, position ) {
+        onDispatchEvent( event, description, position ) {
             window.testPluginEvent = {
                 event,
                 description,

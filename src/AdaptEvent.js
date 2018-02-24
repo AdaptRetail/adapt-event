@@ -42,10 +42,10 @@ module.exports = class AdaptEvent {
         // Format the mouse position for Adapt
         overtakenAdaptEvent( name, description, event );
 
-        // Call "onDispatch" functions on all plugins
+        // Call "onDispatchEvent" functions on all plugins
         for (var i = 0, len = PLUGINS.length; i < len; i++) {
-            if (PLUGINS[i].onDispatch) {
-                PLUGINS[i].onDispatch.call( PLUGINS[i], name, description, event );
+            if (PLUGINS[i].onDispatchEvent) {
+                PLUGINS[i].onDispatchEvent.call( PLUGINS[i], name, description, event );
             }
         }
 

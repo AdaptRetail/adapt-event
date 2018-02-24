@@ -72,9 +72,15 @@ logo.addEventListener( 'click', function( event ) {
 <a name="adapt-click-events"></a>
 #### Adapt Click events
 
-<a name="adapt-click"></a>
-##### Function `.adaptClick();`
+We are also including a plugin to trigger event on click for you.
+
 ```js
+// Import both classes
+import {AdaptEvent, AdaptClickEvent} from '@adapt-retail/adapt-event';
+
+// Add the plugin
+AdaptEvent.addPlugin( new AdaptClickEvent );
+
 /*
  * Automatically dispatchs adapt events,
  * including the position of the mouse when the event is dispatched.
@@ -166,7 +172,7 @@ class AdForm {
      *
      * @return void
      */
-    onDispatch( event, description, position ) {
+    onDispatchEvent( event, description, position ) {
 
         // Cancel if resources is not available
         if (typeof dhtml === 'undefined') {

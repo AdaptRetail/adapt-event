@@ -161,7 +161,7 @@ class AdForm {
      *
      * @return void
      */
-    onDispatch( event, description, position ) {
+    onDispatchEvent( event, description, position ) {
 
         // Cancel if resources is not available
         if (typeof dhtml === 'undefined') {
@@ -186,7 +186,7 @@ AdaptEvent.addPlugin( new AdForm );
 
 <a name="plugin-new-function"></a>
 ##### Adding new functions
-When adding new functionality to an element, and you want to dispatch an event it is important you call the `AdaptEvent.dispatch` function and use the `onDispatch` function to handle your logic.
+When adding new functionality to an element, and you want to dispatch an event it is important you call the `AdaptEvent.dispatch` function and use the `onDispatchEvent` function to handle your logic.
 
 This is because we want to dispatch the event on all plugins like AdaptRetail, Google DoubleClick etc. when your event is fired.
 

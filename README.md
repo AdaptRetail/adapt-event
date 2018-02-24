@@ -1,5 +1,5 @@
 # @adapt-retail/adapt-data
-> ⚠️ This package is not released in stable version, and changes may occur.
+> ⚠️ This package has not been released as a stable release, and changes may occur.
 
 > Easy dispatching of events in [Adapt Retail](https://adaptretail.com).
 

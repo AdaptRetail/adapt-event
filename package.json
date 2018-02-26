@@ -1,6 +1,6 @@
 {
   "name": "@adapt-retail/adapt-event",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Dispatch events eventa to adapt and other.",
   "main": "dist/index.js",
   "scripts": {

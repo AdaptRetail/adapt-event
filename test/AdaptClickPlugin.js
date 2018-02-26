@@ -118,7 +118,24 @@ test( 'it can navigate to a url on a click event', t => {
 
 } );
 
-// it can set event name and description
+test( 'it can set event name and description', t => {
+    let testUrl = 'https://testurl.test';
+
+    // Trigger the event
+    document.body.firstChild.adaptClickAndNavigate( testUrl, 'my-click', 'on-this' );
+
+    // Trigger the mouse click on the element
+    dispatchMouseClickOn( document.body.firstChild, 100, 200 );
+
+    // Check if we triggered the event
+    t.deepEqual( window.triggeredEvent, {
+        name: 'my-click',
+        description: 'on-this',
+        event: window.triggeredEvent.event,
+    } );
+} );
+
 // other plugins can overwrite the format url we navigate to but we still keep the url on the event on the event
 // It can set what target to open the url
 // It is binding adapt google analythics url to the event and append event name to content
+// Should it Loop through all plugins and format the url?

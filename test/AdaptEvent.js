@@ -1,8 +1,38 @@
 import test from 'ava';
 import AdaptEvent from '../dist/index';
+import sinon from 'sinon';
 
 test.beforeEach( t => {
     window.triggeredEvent = null;
+} );
+
+test( 'Is console.logging the event if no event is called.', t => {
+
+    // Take over the console log to make it testable
+    var tmpConsoleLog = console.log;
+    console.log = sinon.spy();
+
+    // Set the event function to null
+    var tmpAdaptEvent = AdaptEvent.EVENT;
+    AdaptEvent.EVENT = null;
+
+    // Dispatch the event
+    AdaptEvent.dispatch( 'my-event', 'description' );
+
+    // Make sure the event is not triggered
+    t.is( window.triggeredEvent, null );
+
+    // Check if we console logged the event
+    t.true( console.log.calledWith( 'AdaptEvent: ', {
+        name: 'my-event',
+        description: 'description',
+        event: null,
+    } ) );
+
+    // Restore the taken over functions
+    console.log = tmpConsoleLog;
+    AdaptEvent.EVENT = tmpAdaptEvent;
+
 } );
 
 test( 'Dispatching event without event function, will return null', t => {

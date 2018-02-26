@@ -140,13 +140,13 @@ class AdForm {
 
         // Do the logic
         switch (name.toLowerCase()) {
-            case: 'click':
+            case 'click':
                 dhtml.sendEvent( 5, 'Click' );
             break;
-            case: 'next':
+            case 'next':
                 dhtml.sendEvent( 4, 'Next' );
             break;
-            case: 'previous':
+            case 'previous':
                 dhtml.sendEvent( 4, 'Previous' );
             break;
         }

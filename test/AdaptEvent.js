@@ -2,16 +2,7 @@ import test from 'ava';
 import AdaptEvent from '../dist/index';
 
 test.beforeEach( t => {
-
     window.triggeredEvent = null;
-
-    window.event = function( event, description, mouseEvent ) {
-        window.triggeredEvent = {
-            event,
-            description,
-            mouseEvent
-        };
-    };
 } );
 
 test( 'Dispatching event without event function, will return null', t => {
@@ -19,9 +10,9 @@ test( 'Dispatching event without event function, will return null', t => {
     AdaptEvent.dispatch( 'my-event', 'description' );
 
     t.deepEqual( window.triggeredEvent, {
-        event: 'my-event',
+        name: 'my-event',
         description: 'description',
-        mouseEvent: null,
+        event: null,
     } );
 
 } );
@@ -51,11 +42,11 @@ test( 'it can add plugin to extend what happends when we trigger an event', t =>
 
     class TestPlugin {
 
-        onDispatchEvent( event, description, position ) {
+        onDispatchEvent( name, description, event ) {
             window.testPluginEvent = {
-                event,
+                name,
                 description,
-                position,
+                event,
             };
         }
 
@@ -71,24 +62,7 @@ test( 'it can add plugin to extend what happends when we trigger an event', t =>
     } );
 
     // Check if we are calling the normal event
-    t.deepEqual( window.triggeredEvent, {
-        event: 'my-event',
-        description: 'description',
-        mouseEvent: {
-            x: 100,
-            y: 200,
-        }
-    } );
-
-    // Check if we are calling the normal event
-    t.deepEqual( window.testPluginEvent, {
-        event: 'my-event',
-        description: 'description',
-        position: {
-            x: 100,
-            y: 200,
-        }
-    } );
+    t.deepEqual( window.testPluginEvent, window.triggeredEvent );
 } );
 
 test( 'plugins can add own functionality', t => {

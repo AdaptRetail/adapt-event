@@ -22,13 +22,6 @@ test.beforeEach( function() {
 
     // Prepare trigger event
     window.triggeredEvent = null;
-    window.event = function( event, description, mousePosition ) {
-        window.triggeredEvent = {
-            event,
-            description,
-            mousePosition
-        };
-    };
 
     // Remove all existing childs and add new
     while( document.body.firstChild ) {
@@ -59,7 +52,6 @@ test( 'it can extend DOMElement to include click function', t => {
 
     // Trigger the event
     dispatchMouseClickOn( document.body.firstChild, 100, 200 );
-    //
 
     // Check if the closure is called
     // And if the event is a MouseEvent
@@ -67,9 +59,9 @@ test( 'it can extend DOMElement to include click function', t => {
 
     // Check if AdaptEvent.dispatch is called and set default properties
     t.deepEqual( window.triggeredEvent, {
+        name: 'click',
         description: '<div id="my-element" class="test class"></div>',
-        event: 'click',
-        mousePosition: closureEvent
+        event: closureEvent
     } );
 
 } );
@@ -88,9 +80,9 @@ test( 'it can overwrite the event and description', t => {
     dispatchMouseClickOn( document.body.firstChild, 100, 200 );
 
     t.deepEqual( window.triggeredEvent, {
+        name: customEventName,
         description: customEventDescription,
-        event: customEventName,
-        mousePosition: closureEvent
+        event: closureEvent
     } );
 
 } );

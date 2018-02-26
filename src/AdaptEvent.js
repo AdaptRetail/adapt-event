@@ -1,4 +1,10 @@
-let overtakenAdaptEvent = null;
+let overtakenAdaptEvent = window.event || function(name, description, event) {
+    console.log( 'AdaptEvent: ', {
+        name,
+        description,
+        event,
+    } );
+}
 
 const PLUGINS = [];
 

@@ -35,7 +35,8 @@
   },
   "ava": {
     "require": [
-      "./test/helpers/setup-browser-env.js"
+      "./test/helpers/setup-browser-env.js",
+      "./test/helpers/adapt-event.js"
     ]
   }
 }

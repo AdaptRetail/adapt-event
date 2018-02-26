@@ -1,4 +1,5 @@
 import test from 'ava';
+import sinon from 'sinon';
 import { AdaptEvent, AdaptClickEvent } from '../dist/index';
 
 AdaptEvent.addPlugin( new AdaptClickEvent );
@@ -18,7 +19,14 @@ var dispatchMouseClickOn = function( element, x, y ) {
     element.dispatchEvent(event);
 }
 
-test.beforeEach( function() {
+test.afterEach( t => {
+    // Restore the window.open
+    window.open = t.context.windowOpen;
+});
+test.beforeEach( t => {
+    // Highjack the window.open
+    t.context.windowOpen = window.open;
+    window.open = sinon.spy();
 
     // Prepare trigger event
     window.triggeredEvent = null;
@@ -46,7 +54,7 @@ test.beforeEach( function() {
 test( 'it can extend DOMElement to include click function', t => {
 
     var closureEvent = null;
-    document.firstChild.adaptClick( function(event) {
+    document.body.firstChild.adaptClick( function(event) {
         closureEvent = event;
     } );
 
@@ -72,7 +80,7 @@ test( 'it can overwrite the event and description', t => {
     var customEventName = 'custom-event-name';
     var customEventDescription = 'Custom event description';
 
-    document.firstChild.adaptClick( function(event) {
+    document.body.firstChild.adaptClick( function(event) {
         closureEvent = event;
     }, customEventName, customEventDescription );
 
@@ -87,5 +95,30 @@ test( 'it can overwrite the event and description', t => {
 
 } );
 
-// test( 'it console.log the event if no event is defined on window', t => {
-// } );
+test( 'it can navigate to a url on a click event', t => {
+
+    let testUrl = 'https://testurl.test';
+
+    // Trigger the event
+    document.body.firstChild.adaptClickAndNavigate( testUrl );
+
+    // Trigger the mouse click on the element
+    dispatchMouseClickOn( document.body.firstChild, 100, 200 );
+
+    // Check if we triggered the event
+    t.true( window.triggeredEvent.event instanceof MouseEvent );
+    t.deepEqual( window.triggeredEvent, {
+        name: 'navigate-to',
+        description: testUrl,
+        event: window.triggeredEvent.event,
+    } );
+
+    // Check if we called open window
+    t.true( window.open.calledWith( testUrl, '_blank' ) );
+
+} );
+
+// it can set event name and description
+// other plugins can overwrite the format url we navigate to but we still keep the url on the event on the event
+// It can set what target to open the url
+// It is binding adapt google analythics url to the event and append event name to content

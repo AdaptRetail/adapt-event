@@ -11,6 +11,14 @@ module.exports = class AdaptClickPlugin {
      * @return void
      */
     mounted() {
+        this.createAdaptClickFunction();
+        this.createAdaptClickAndNavigateFunction();
+    }
+
+    /**
+     * Create adaptClick function
+     */
+    createAdaptClickFunction() {
 
         if (! Element.adaptClick) {
             var self = this;
@@ -20,7 +28,27 @@ module.exports = class AdaptClickPlugin {
                     false );
             };
         }
+    }
 
+    /**
+     * Create adaptClick function
+     */
+    createAdaptClickAndNavigateFunction() {
+
+        if (! Element.adaptClickAndNavigate) {
+            var self = this;
+            Element.prototype.adaptClickAndNavigate = function( url, eventName = 'navigate-to', description = null ) {
+
+                description = description || url;
+
+                this.adaptClick( function( event ) {
+
+                    window.open( url, '_blank' );
+
+                }, eventName, description );
+
+            };
+        }
     }
 
     /**

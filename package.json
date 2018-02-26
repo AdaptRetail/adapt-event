@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LasseHaslev/adapt-event.git"
+    "url": "git+https://github.com/AdaptRetail/adapt-event.git"
   },
   "keywords": [
     "adapt-retail",
@@ -23,9 +23,9 @@
   "author": "Lasse S. Haslev",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/LasseHaslev/adapt-event/issues"
+    "url": "https://github.com/AdaptRetail/adapt-event/issues"
   },
-  "homepage": "https://github.com/LasseHaslev/adapt-event#readme",
+  "homepage": "https://github.com/AdaptRetail/adapt-event#readme",
   "devDependencies": {
     "@lassehaslev/executor": "^1.0.1",
     "ava": "^0.25.0",

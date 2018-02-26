@@ -8,16 +8,7 @@
     - [Import](#import)
     - [Add plugin](#add-plugin)
     - [Dispatch events](#dispatch-event)
-        <!--- [Adapt Click events](#adapt-click-events)-->
-            <!--- [`.adaptClick();`](#adapt-click)-->
-            <!--- [`.adaptClickAndNavigate();`](#adapt-click)-->
     - [Extending functionality](#plugins)
-        <!--- [Adding plugins](#add-plugin)-->
-        <!--- [Available plugins](#available-plugins)-->
-        <!--- [Creating plugins](#create-plugins)-->
-            <!--- [Adding new functions](#plugin-new-function)-->
-            <!--- [Extending exsisting functions](#plugin-extend-function)-->
-        <!--- [Prevent adding of default plugins](#prevent-default)-->
 
 <a name="install"></a>
 ## Install
@@ -31,9 +22,6 @@ npm install @adapt-retail/adapt-event
 
 The event class will help you dispatch events in Adapt Retail.
 You can use it to track whatever event you like, but we got some preconfigured events for you.
-
-<!-- When working with the production locally we only fake the events to the server and you can see the output of your event in the console. -->
-<!-- When pushed to Adapt, we automatically switch out the events to use the production event class. -->
 
 <a name="import"></a>
 ### Import to project
@@ -97,23 +85,6 @@ document.querySelector( '.logo' ).adaptClick( function( event ) {
 }, 'a-click', 'logo' );
 ```
 
-<!-- <a name="adapt-click-and-navigate"></a> -->
-<!-- ##### Function `.adaptClickAndNavigate();` -->
-<!-- ```js -->
-<!-- /* -->
- <!-- * This function is extending the adaptClick -->
- <!-- * and adds functionality to navigate to url -->
- <!-- * -->
- <!-- * @param url -->
- <!-- * @param description (optional) (default: 'navigate-to-url') -->
- <!-- * @param position (optional) (default: The url provided to navigate to) -->
- <!-- *  -->
- <!-- * @return void -->
- <!-- */ -->
-<!-- document.querySelector( '.logo' ) -->
-    <!-- .adaptClickAndNavigate( 'https://adaptretail.com', 'toUrl', 'homepage'); -->
-<!-- ``` -->
-
 <a name="plugins"></a>
 ### Extending functionality
 
@@ -131,23 +102,9 @@ You can extend functionality of the AdaptEvent by adding plugins.
 AdaptEvent.addPlugin( new AdForm );
 ```
 
-<!-- <a name="available-plugins"></a> -->
-<!-- #### Available plugins -->
-
-<!-- Here is a set of preconfigured plugins to use -->
-
-<!-- - Display networks events -->
-    <!-- - [AdForm](#not-created-yet) -->
-    <!-- - [DoubleClick](#not-created-yet) -->
-    <!-- - [Adform](#not-created-yet) -->
-    <!-- - [Adform](#not-created-yet) -->
-<!-- - Custom functions -->
-    <!-- - [Swipe](#) -->
-    <!-- - [Face recognition](#) -->
-
 <a name="create-plugins"></a>
 #### Creating plugins
-> [AdaptClickEvent](https://github.com/LasseHaslev/adapt-event/blob/master/src/AdaptClickEvent.js) is actually a plugin.
+> [AdaptClickEvent](https://github.com/AdaptRetail/adapt-event/blob/master/src/AdaptClickEvent.js) is actually a plugin.
 > Use it as a reference.
 
 Here is an example of extending the AdaptEvent to trigger AdForm events when we trigger events.
@@ -174,7 +131,7 @@ class AdForm {
      *
      * @return void
      */
-    onDispatchEvent( event, description, position ) {
+    onDispatchEvent( name, description, event ) {
 
         // Cancel if resources is not available
         if (typeof dhtml === 'undefined') {
@@ -182,12 +139,15 @@ class AdForm {
         }
 
         // Do the logic
-        switch (event.toLowerCase()) {
+        switch (name.toLowerCase()) {
             case: 'click':
                 dhtml.sendEvent( 5, 'Click' );
             break;
             case: 'next':
                 dhtml.sendEvent( 4, 'Next' );
+            break;
+            case: 'previous':
+                dhtml.sendEvent( 4, 'Previous' );
             break;
         }
 

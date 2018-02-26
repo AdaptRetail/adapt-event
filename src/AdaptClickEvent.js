@@ -38,12 +38,20 @@ module.exports = class AdaptClickPlugin {
         if (! Element.adaptClickAndNavigate) {
             var self = this;
             Element.prototype.adaptClickAndNavigate = function( url, eventName = 'navigate-to', description = null ) {
-
                 description = description || url;
 
                 this.adaptClick( function( event ) {
 
-                    window.open( url, '_blank' );
+                    let newUrl = url;
+                    let plugins = AdaptEvent.PLUGINS;
+                    for (var i = 0, len = plugins.length; i < len; i++) {
+                        let plugin = plugins[i];
+                        if (plugin.formatAdaptClickUrl) {
+                            newUrl = plugin.formatAdaptClickUrl.call( this, newUrl );
+                        }
+                    }
+
+                    window.open( newUrl, '_blank' );
 
                 }, eventName, description );
 

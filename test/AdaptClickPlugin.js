@@ -99,7 +99,7 @@ test( 'it can navigate to a url on a click event', t => {
 
     let testUrl = 'https://testurl.test';
 
-    // Trigger the event
+    // Setup the custom function
     document.body.firstChild.adaptClickAndNavigate( testUrl );
 
     // Trigger the mouse click on the element
@@ -121,7 +121,7 @@ test( 'it can navigate to a url on a click event', t => {
 test( 'it can set event name and description', t => {
     let testUrl = 'https://testurl.test';
 
-    // Trigger the event
+    // Setup the custom function
     document.body.firstChild.adaptClickAndNavigate( testUrl, 'my-click', 'on-this' );
 
     // Trigger the mouse click on the element
@@ -135,7 +135,39 @@ test( 'it can set event name and description', t => {
     } );
 } );
 
-// other plugins can overwrite the format url we navigate to but we still keep the url on the event on the event
+test( 'other plugins can overwrite the format url we navigate to but we still keep the url on the event on the event', t => {
+
+    let testUrl = 'https://testurl.test';
+
+    class PluginOne {
+        formatAdaptClickUrl( url ) {
+            return url + '-test';
+        }
+    }
+
+    class PluginTwo {
+        formatAdaptClickUrl( url ) {
+            return url + '-test';
+        }
+    }
+
+    AdaptEvent.addPlugin( new PluginOne );
+    AdaptEvent.addPlugin( new PluginTwo );
+
+    // Setup the custom function
+    document.body.firstChild.adaptClickAndNavigate( testUrl );
+
+    // Trigger the mouse click on the element
+    dispatchMouseClickOn( document.body.firstChild, 100, 200 );
+
+    // Check if we triggered the event
+    t.is( window.triggeredEvent.description, testUrl );
+
+    // Check if we called open window
+    t.true( window.open.calledWith( testUrl + '-test' + '-test', '_blank' ) );
+
+} );
+
+// should adaptClickAndNavigate be its own class and extend adaptClick?
 // It can set what target to open the url
 // It is binding adapt google analythics url to the event and append event name to content
-// Should it Loop through all plugins and format the url?

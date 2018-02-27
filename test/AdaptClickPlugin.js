@@ -2,8 +2,6 @@ import test from 'ava';
 import sinon from 'sinon';
 import { AdaptEvent, AdaptClickEvent } from '../dist/index';
 
-AdaptEvent.addPlugin( new AdaptClickEvent );
-
 var dispatchMouseClickOn = function( element, x, y ) {
     var event = new MouseEvent('click', {
         'view': window,
@@ -27,6 +25,10 @@ test.beforeEach( t => {
     // Highjack the window.open
     t.context.windowOpen = window.open;
     window.open = sinon.spy();
+
+    // Prepare the plugin
+    AdaptEvent.PLUGINS = [];
+    AdaptEvent.addPlugin( new AdaptClickEvent );
 
     // Prepare trigger event
     window.triggeredEvent = null;
@@ -169,5 +171,26 @@ test( 'other plugins can overwrite the format url we navigate to but we still ke
 } );
 
 // should adaptClickAndNavigate be its own class and extend adaptClick?
-// It can set what target to open the url
+test( 'It can set what target to use when navigating to the url', t => {
+
+    let testUrl = 'https://testurl.test';
+
+    class FormatTargetEventClickPlugin {
+        setAdaptClickTarget() {
+            return "_self";
+        }
+    }
+
+    AdaptEvent.addPlugin( new FormatTargetEventClickPlugin );
+
+    // Setup the custom function
+    document.body.firstChild.adaptClickAndNavigate( testUrl );
+
+    // Trigger the mouse click on the element
+    dispatchMouseClickOn( document.body.firstChild, 100, 200 );
+
+    // Check if we called open window
+    t.true( window.open.calledWith( testUrl, '_self' ) );
+
+} );
 // It is binding adapt google analythics url to the event and append event name to content

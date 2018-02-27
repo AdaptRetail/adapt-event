@@ -42,16 +42,19 @@ module.exports = class AdaptClickPlugin {
 
                 this.adaptClick( function( event ) {
 
-                    let newUrl = url;
                     let plugins = AdaptEvent.PLUGINS;
+                    let target = '_blank';
                     for (var i = 0, len = plugins.length; i < len; i++) {
                         let plugin = plugins[i];
                         if (plugin.formatAdaptClickUrl) {
-                            newUrl = plugin.formatAdaptClickUrl.call( this, newUrl );
+                            url = plugin.formatAdaptClickUrl.call( this, url );
+                        }
+                        if (plugin.setAdaptClickTarget) {
+                            target = plugin.setAdaptClickTarget.call( this, url );
                         }
                     }
 
-                    window.open( newUrl, '_blank' );
+                    window.open( url, target );
 
                 }, eventName, description );
 

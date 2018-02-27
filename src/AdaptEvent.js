@@ -1,6 +1,6 @@
 let overtakenAdaptEvent = window.event;
 
-const PLUGINS = [];
+let PLUGINS = [];
 
 module.exports = class AdaptEvent {
 
@@ -11,6 +11,18 @@ module.exports = class AdaptEvent {
      */
     static get PLUGINS() {
         return PLUGINS;
+    }
+
+    /**
+     * Set the Plugins. 
+     * This is only to overwrite the event in tests.
+     *
+     * @param value
+     *
+     * @return void
+     */
+    static set PLUGINS(plugins) {
+        PLUGINS = plugins;
     }
 
     /**

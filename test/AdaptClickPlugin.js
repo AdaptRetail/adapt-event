@@ -193,4 +193,3 @@ test( 'It can set what target to use when navigating to the url', t => {
     t.true( window.open.calledWith( testUrl, '_self' ) );
 
 } );
-// It is binding adapt google analythics url to the event and append event name to content

@@ -47,10 +47,10 @@ module.exports = class AdaptClickPlugin {
                     for (var i = 0, len = plugins.length; i < len; i++) {
                         let plugin = plugins[i];
                         if (plugin.formatAdaptClickUrl) {
-                            url = plugin.formatAdaptClickUrl.call( this, url );
+                            url = plugin.formatAdaptClickUrl.call( this, url, eventName, description, event );
                         }
                         if (plugin.setAdaptClickTarget) {
-                            target = plugin.setAdaptClickTarget.call( this, url );
+                            target = plugin.setAdaptClickTarget.call( this, url, eventName, description, event );
                         }
                     }
 

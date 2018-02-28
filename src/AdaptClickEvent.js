@@ -12,6 +12,7 @@ module.exports = class AdaptClickPlugin {
      */
     mounted() {
         this.createAdaptClickFunction();
+        this.createNavigateFunctionOnAdaptEvent();
         this.createAdaptClickAndNavigateFunction();
     }
 
@@ -42,24 +43,43 @@ module.exports = class AdaptClickPlugin {
 
                 this.adaptClick( function( event ) {
 
-                    let plugins = AdaptEvent.PLUGINS;
-                    let target = '_blank';
-                    for (var i = 0, len = plugins.length; i < len; i++) {
-                        let plugin = plugins[i];
-                        if (plugin.formatAdaptClickUrl) {
-                            url = plugin.formatAdaptClickUrl.call( this, url, eventName, description, event );
-                        }
-                        if (plugin.setAdaptClickTarget) {
-                            target = plugin.setAdaptClickTarget.call( this, url, eventName, description, event );
-                        }
-                    }
-
-                    window.open( url, target );
+                    AdaptEvent.navigate( url, eventName, description, event );
 
                 }, eventName, description );
 
             };
         }
+    }
+
+    /**
+     * Create navigate function on AdaptEvent
+     */
+    createNavigateFunctionOnAdaptEvent() {
+        if (!AdaptEvent.navigate) {
+            var self = this;
+            AdaptEvent.navigate = function( url, eventName = 'navigate-to', description = null, event = null ) {
+                description = description || url;
+                AdaptEvent.dispatch( eventName, description, event );
+                self.prepareAndNavigate( url, eventName, description, event );
+            }
+        }
+    }
+
+    prepareAndNavigate( url, eventName, description, event = null ) {
+
+        let plugins = AdaptEvent.PLUGINS;
+        let target = '_blank';
+        for (var i = 0, len = plugins.length; i < len; i++) {
+            let plugin = plugins[i];
+            if (plugin.formatAdaptClickUrl) {
+                url = plugin.formatAdaptClickUrl.call( this, url, eventName, description, event );
+            }
+            if (plugin.setAdaptClickTarget) {
+                target = plugin.setAdaptClickTarget.call( this, url, eventName, description, event );
+            }
+        }
+
+        window.open( url, target );
     }
 
     /**

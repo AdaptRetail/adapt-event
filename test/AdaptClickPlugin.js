@@ -193,3 +193,21 @@ test( 'It can set what target to use when navigating to the url', t => {
     t.true( window.open.calledWith( testUrl, '_self' ) );
 
 } );
+
+test( 'We are adding navigate function to AdaptEvent', t => {
+
+    let testUrl = 'https://testurl.test';
+
+    AdaptEvent.navigate( testUrl, 'event-name', 'description' );
+
+    // Check if the event was fired
+    t.deepEqual( window.triggeredEvent, {
+        name: 'event-name',
+        description: 'description',
+        event: null,
+    } );
+
+    // Check if we called open window
+    t.true( window.open.calledWith( testUrl, '_blank' ) );
+
+} );

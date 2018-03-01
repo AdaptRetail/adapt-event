@@ -72,3 +72,21 @@ test( 'If the description is the same as the url, we do not add utm_content', t 
     // Check if we called open window
     t.true( window.open.calledWith( testUrl + window.adapt_data.details.ga_url ) );
 } );
+
+test( 'it ignores the adapt google analythics if window.adapt_data is not set', t => {
+    var tmpAdaptData = window.adapt_data;
+    delete window.adapt_data;
+
+    let testUrl = 'https://testurl.test';
+
+    // Setup the custom function
+    document.body.firstChild.adaptClickAndNavigate( testUrl );
+
+    // Trigger the mouse click on the element
+    dispatchMouseClickOn( document.body.firstChild, 100, 200 );
+
+    // Check if we called open window
+    t.true( window.open.calledWith( testUrl ) );
+
+    window.adapt_data = tmpAdaptData;
+} );

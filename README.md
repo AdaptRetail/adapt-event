@@ -1,4 +1,4 @@
-# @adapt-retail/adapt-data
+# @adapt-retail/adapt-data [![Build Status](https://travis-ci.org/AdaptRetail/adapt-event.svg?branch=master)](https://travis-ci.org/AdaptRetail/adapt-event)
 > ⚠️ This package has not been released as a stable release, and changes may occur.
 
 > Easy dispatching of events in [Adapt Retail](https://adaptretail.com).

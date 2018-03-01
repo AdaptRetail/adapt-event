@@ -6,9 +6,11 @@
 - [Install](#install)
 - [Usage](#usage)
     - [Import](#import)
-    - [Add plugin](#add-plugin)
     - [Dispatch events](#dispatch-event)
-    - [Extending functionality](#plugins)
+- [Plugins](#plugins)
+    - [Default plugins](#default-plugins)
+- [Development](#development)
+    
 
 <a name="install"></a>
 ## Install
@@ -57,107 +59,47 @@ logo.addEventListener( 'click', function( event ) {
 } );
 ```
 
-<a name="adapt-click-events"></a>
-#### Adapt Click events
-
-We are also including a plugin to trigger event on click for you.
+<a name="plugins"></a>
+## Plugins
+It is possible to extend the functionality of the AdaptEvent using plugins.
+This could be f.eks. extending the event to match other display networks, such as Google Double Click and AdForm.
+> Read how to build your own [in the documentation](https://github.com/AdaptRetail/adapt-event/wiki/Plugins)
 
 ```js
-// Import both classes
-import {AdaptEvent, AdaptClickEvent} from '@adapt-retail/adapt-event';
+AdaptEvent.addPlugin( new Plugin );
+```
 
-// Add the plugin
+<a name="default-plugins"></a>
+#### Default plugins
+
+We are also including some default plugins to make your life easier.
+
+> Read more [in the documentation](https://github.com/AdaptRetail/adapt-event/wiki/Adapt-Click-Events)
+
+```js
+// Import and add plugin
+import {
+    AdaptEvent,
+    AdaptClickEvent,
+    AdaptGoogleAnalythics
+} from '@adapt-retail/adapt-event';
+
 AdaptEvent.addPlugin( new AdaptClickEvent );
+AdaptEvent.addPlugin( new AdaptGoogleAnalythics );
 
-/*
- * Automatically dispatchs adapt events,
- * including the position of the mouse when the event is dispatched.
- *
- * @param closure
- * @param event (optional) (default: 'click')
- * @param description (optional) (default: String representation of the element)
- * Example (<div class=".logo"></div>)
- * 
- * @return void
- */
+
+// Track a click 
 document.querySelector( '.logo' ).adaptClick( function( event ) {
     ...
 }, 'a-click', 'logo' );
+
+// Track click and navigate to url
+document.querySelector( '.logo' )
+    .adaptClickAndNavigate( 'https://adaptretail.com', 'navigate', 'from-logo' );
 ```
 
-<a name="plugins"></a>
-### Extending functionality
 
-Out of the box this package automatically dispatchs events for Adapt Retail.
-Both for Adapt Rapports and Google Analytics.
-
-You can also easily add plugins to dispatch other events like Google DoubleClick, AdForm, Delta Projects and other with the same API.
-
-<a name="add-plugin"></a>
-#### Adding plugins
-
-You can extend functionality of the AdaptEvent by adding plugins.
-
-```js
-AdaptEvent.addPlugin( new AdForm );
-```
-
-<a name="create-plugins"></a>
-#### Creating plugins
-> [AdaptClickEvent](https://github.com/AdaptRetail/adapt-event/blob/master/src/AdaptClickEvent.js) is actually a plugin.
-> Use it as a reference.
-
-Here is an example of extending the AdaptEvent to trigger AdForm events when we trigger events.
-
-```js
-class AdForm {
-
-    /**
-     * This method is called when
-     * the plugin is added to the plugin stack
-     * @return void
-     */
-    mounted() {
-        console.log( 'Plugin is ready!' );
-    }
-
-    /**
-     * Gets called when AdaptEvent.dispatch
-     * is called.
-     * 
-     * @param event
-     * @param description = null
-     * @param mousePosition Object = null
-     *
-     * @return void
-     */
-    onDispatchEvent( name, description, event ) {
-
-        // Cancel if resources is not available
-        if (typeof dhtml === 'undefined') {
-            return;
-        }
-
-        // Do the logic
-        switch (name.toLowerCase()) {
-            case 'click':
-                dhtml.sendEvent( 5, 'Click' );
-            break;
-            case 'next':
-                dhtml.sendEvent( 4, 'Next' );
-            break;
-            case 'previous':
-                dhtml.sendEvent( 4, 'Previous' );
-            break;
-        }
-
-    }
-}
-
-// Add the plugin to AdaptEvent
-AdaptEvent.addPlugin( new AdForm );
-```
-
+<a name="development"></a>
 ## Development
 ```bash
 # Install dependencies

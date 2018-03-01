@@ -79,8 +79,8 @@ module.exports = class AdaptClickPlugin {
             if (plugin.formatAdaptClickUrl) {
                 url = plugin.formatAdaptClickUrl.call( this, url, eventName, description, event );
             }
-            if (plugin.setAdaptClickTarget) {
-                target = plugin.setAdaptClickTarget.call( this, url, eventName, description, event );
+            if (plugin.setAdaptNavigateTarget) {
+                target = plugin.setAdaptNavigateTarget.call( this, url, eventName, description, event );
             }
         }
 

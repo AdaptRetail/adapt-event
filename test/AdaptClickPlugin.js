@@ -225,7 +225,7 @@ test( 'It can set what target to use when navigating to the url', t => {
     let testUrl = 'https://testurl.test';
 
     class FormatTargetEventClickPlugin {
-        setAdaptClickTarget() {
+        setAdaptNavigateTarget() {
             return "_self";
         }
     }

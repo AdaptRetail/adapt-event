@@ -47,7 +47,7 @@ module.exports = class AdaptClickPlugin {
 
                 this.adaptClick( function( event ) {
 
-                    AdaptEvent.navigate( url, eventName, description, event );
+                    self.prepareAndNavigate( url, eventName, description, event );
 
                 }, eventName, description );
 

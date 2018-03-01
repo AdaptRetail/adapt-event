@@ -20,18 +20,19 @@ var dispatchMouseClickOn = function( element, x, y ) {
 test.afterEach( t => {
     // Restore the window.open
     window.open = t.context.windowOpen;
+    AdaptEvent.dispatch = t.contextAdaptEventDispatch;
 });
 test.beforeEach( t => {
     // Highjack the window.open
     t.context.windowOpen = window.open;
     window.open = sinon.spy();
 
+    t.contextAdaptEventDispatch = AdaptEvent.dispatch;
+    AdaptEvent.dispatch = sinon.spy();
+
     // Prepare the plugin
     AdaptEvent.PLUGINS = [];
     AdaptEvent.addPlugin( new AdaptClickEvent );
-
-    // Prepare trigger event
-    window.triggeredEvent = null;
 
     // Remove all existing childs and add new
     while( document.body.firstChild ) {
@@ -68,11 +69,7 @@ test( 'it can extend DOMElement to include click function', t => {
     t.true( closureEvent instanceof MouseEvent );
 
     // Check if AdaptEvent.dispatch is called and set default properties
-    t.deepEqual( window.triggeredEvent, {
-        name: 'click',
-        description: '<div id="my-element" class="test class"></div>',
-        event: closureEvent
-    } );
+    t.true( AdaptEvent.dispatch.calledWith( 'click', '<div id="my-element" class="test class"></div>', closureEvent ) );
 
 } );
 
@@ -87,11 +84,7 @@ test( 'adding null as paramter for adaptClick will use the default paramters', t
     dispatchMouseClickOn( document.body.firstChild, 100, 200 );
 
     // Check if AdaptEvent.dispatch is called and set default properties
-    t.deepEqual( window.triggeredEvent, {
-        name: 'click',
-        description: '<div id="my-element" class="test class"></div>',
-        event: closureEvent
-    } );
+    t.true( AdaptEvent.dispatch.calledWith( 'click', '<div id="my-element" class="test class"></div>', closureEvent ) );
 } );
 
 test( 'it can overwrite the event and description', t => {
@@ -107,11 +100,7 @@ test( 'it can overwrite the event and description', t => {
     // Trigger the event
     dispatchMouseClickOn( document.body.firstChild, 100, 200 );
 
-    t.deepEqual( window.triggeredEvent, {
-        name: customEventName,
-        description: customEventDescription,
-        event: closureEvent
-    } );
+    t.true( AdaptEvent.dispatch.calledWith( customEventName, customEventDescription, closureEvent ) );
 
 } );
 
@@ -126,12 +115,8 @@ test( 'it can navigate to a url on a click event', t => {
     dispatchMouseClickOn( document.body.firstChild, 100, 200 );
 
     // Check if we triggered the event
-    t.true( window.triggeredEvent.event instanceof MouseEvent );
-    t.deepEqual( window.triggeredEvent, {
-        name: 'navigate-to',
-        description: testUrl,
-        event: window.triggeredEvent.event,
-    } );
+    t.true( AdaptEvent.dispatch.calledOnceWith( 'navigate-to', testUrl ) );
+    t.true( AdaptEvent.dispatch.args[0][2] instanceof MouseEvent );
 
     // Check if we called open window
     t.true( window.open.calledWith( testUrl, '_blank' ) );
@@ -149,23 +134,17 @@ test( 'Adding null as paramter in one of the parameters returns default', t => {
     dispatchMouseClickOn( document.body.firstChild, 100, 200 );
 
     // Check if we triggered the event
-    t.deepEqual( window.triggeredEvent, {
-        name: 'navigate-to',
-        description: testUrl,
-        event: window.triggeredEvent.event,
-    } );
 
     AdaptEvent.navigate( testUrl, null, null );
 
     // Check if we triggered the event
-    t.deepEqual( window.triggeredEvent, {
-        name: 'navigate-to',
-        description: testUrl,
-        event: window.triggeredEvent.event,
-    } );
+    t.true( AdaptEvent.dispatch.calledTwice );
+    t.true( AdaptEvent.dispatch.alwaysCalledWith( 'navigate-to', testUrl ) );
+    t.true( AdaptEvent.dispatch.args[0][2] instanceof MouseEvent );
 
     // Check if we called open window
-    t.true( window.open.calledWith( testUrl, '_blank' ) );
+    t.true( window.open.calledTwice );
+    t.true( window.open.alwaysCalledWith( testUrl, '_blank' ) );
 
 } );
 
@@ -179,11 +158,7 @@ test( 'it can set event name and description', t => {
     dispatchMouseClickOn( document.body.firstChild, 100, 200 );
 
     // Check if we triggered the event
-    t.deepEqual( window.triggeredEvent, {
-        name: 'my-click',
-        description: 'on-this',
-        event: window.triggeredEvent.event,
-    } );
+    t.true( AdaptEvent.dispatch.alwaysCalledWith( 'my-click', 'on-this' ) );
 } );
 
 test( 'other plugins can overwrite the format url we navigate to but we still keep the url on the event on the event', t => {
@@ -212,7 +187,7 @@ test( 'other plugins can overwrite the format url we navigate to but we still ke
     dispatchMouseClickOn( document.body.firstChild, 100, 200 );
 
     // Check if we triggered the event
-    t.is( window.triggeredEvent.description, testUrl );
+    t.is( AdaptEvent.dispatch.args[0][1], testUrl );
 
     // Check if we called open window
     t.true( window.open.calledWith( testUrl + '-test' + '-test', '_blank' ) );
@@ -250,11 +225,7 @@ test( 'We are adding navigate function to AdaptEvent', t => {
     AdaptEvent.navigate( testUrl, 'event-name', 'description' );
 
     // Check if the event was fired
-    t.deepEqual( window.triggeredEvent, {
-        name: 'event-name',
-        description: 'description',
-        event: null,
-    } );
+    t.true( AdaptEvent.dispatch.calledWith( 'event-name', 'description', null ) );
 
     // Check if we called open window
     t.true( window.open.calledWith( testUrl, '_blank' ) );

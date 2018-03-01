@@ -23,7 +23,10 @@ module.exports = class AdaptClickPlugin {
 
         if (! Element.adaptClick) {
             var self = this;
-            Element.prototype.adaptClick = function( closure, eventName = 'click', description = null ) {
+            Element.prototype.adaptClick = function( closure, eventName = null, description = null ) {
+
+                eventName = eventName || 'click';
+
                 this.addEventListener( 'click',
                     self.onClick.bind( this, closure, eventName, description ),
                     false );
@@ -38,8 +41,9 @@ module.exports = class AdaptClickPlugin {
 
         if (! Element.adaptClickAndNavigate) {
             var self = this;
-            Element.prototype.adaptClickAndNavigate = function( url, eventName = 'navigate-to', description = null ) {
+            Element.prototype.adaptClickAndNavigate = function( url, eventName = null, description = null ) {
                 description = description || url;
+                eventName = eventName || 'navigate-to';
 
                 this.adaptClick( function( event ) {
 
@@ -57,8 +61,9 @@ module.exports = class AdaptClickPlugin {
     createNavigateFunctionOnAdaptEvent() {
         if (!AdaptEvent.navigate) {
             var self = this;
-            AdaptEvent.navigate = function( url, eventName = 'navigate-to', description = null, event = null ) {
+            AdaptEvent.navigate = function( url, eventName = null, description = null, event = null ) {
                 description = description || url;
+                eventName = eventName || 'navigate-to';
                 AdaptEvent.dispatch( eventName, description, event );
                 self.prepareAndNavigate( url, eventName, description, event );
             }

@@ -76,6 +76,24 @@ test( 'it can extend DOMElement to include click function', t => {
 
 } );
 
+test( 'adding null as paramter for adaptClick will use the default paramters', t => {
+
+    var closureEvent = null;
+    document.body.firstChild.adaptClick( function(event) {
+        closureEvent = event;
+    }, null, null );
+
+    // Trigger the event
+    dispatchMouseClickOn( document.body.firstChild, 100, 200 );
+
+    // Check if AdaptEvent.dispatch is called and set default properties
+    t.deepEqual( window.triggeredEvent, {
+        name: 'click',
+        description: '<div id="my-element" class="test class"></div>',
+        event: closureEvent
+    } );
+} );
+
 test( 'it can overwrite the event and description', t => {
 
     var closureEvent = null;
@@ -109,6 +127,37 @@ test( 'it can navigate to a url on a click event', t => {
 
     // Check if we triggered the event
     t.true( window.triggeredEvent.event instanceof MouseEvent );
+    t.deepEqual( window.triggeredEvent, {
+        name: 'navigate-to',
+        description: testUrl,
+        event: window.triggeredEvent.event,
+    } );
+
+    // Check if we called open window
+    t.true( window.open.calledWith( testUrl, '_blank' ) );
+
+} );
+
+test( 'Adding null as paramter in one of the parameters returns default', t => {
+
+    let testUrl = 'https://testurl.test';
+
+    // Setup the custom function
+    document.body.firstChild.adaptClickAndNavigate( testUrl, null, null );
+
+    // Trigger the mouse click on the element
+    dispatchMouseClickOn( document.body.firstChild, 100, 200 );
+
+    // Check if we triggered the event
+    t.deepEqual( window.triggeredEvent, {
+        name: 'navigate-to',
+        description: testUrl,
+        event: window.triggeredEvent.event,
+    } );
+
+    AdaptEvent.navigate( testUrl, null, null );
+
+    // Check if we triggered the event
     t.deepEqual( window.triggeredEvent, {
         name: 'navigate-to',
         description: testUrl,
